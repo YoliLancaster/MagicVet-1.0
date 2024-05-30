@@ -1,23 +1,23 @@
-package main.java.com.magicvet.auth;
+package com.magicvet.service.runner.impl;
 
 import com.magicvet.auth.Authenticator;
 import com.magicvet.auth.EntityRegister;
 import com.magicvet.auth.JDBCInsert;
-import com.magicvet.service.ClientService;
+import com.magicvet.service.runner.AppRunner;
 
 import java.util.Scanner;
 
-public class AppRunner {
+public class AppRunnerImpl implements AppRunner {
 
     private final JDBCInsert jdbcInsert;
 
-    public AppRunner() {
+    public AppRunnerImpl() {
         jdbcInsert = new JDBCInsert();
     }
 
-
+    @Override
     public void run() {
-        jdbcInsert.getConnection();
+        //jdbcInsert.getConnection();
 
         System.out.println("Welcome to MagicVet!");
         Scanner scanner = new Scanner(System.in);

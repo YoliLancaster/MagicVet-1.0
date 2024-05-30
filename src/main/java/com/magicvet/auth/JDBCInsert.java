@@ -10,7 +10,7 @@ public class JDBCInsert {
     public static final String USER = "postgres";
     public static final String PSW = "12345";
 
-    public Connection getConnection() {
+    private Connection getConnection() {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(DB_URL, USER, PSW);
@@ -20,7 +20,7 @@ public class JDBCInsert {
         return connection;
     }
 
-            public void createTables() {
+    public void createTables() {
                 try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             String createUserTable = "CREATE TABLE IF NOT EXISTS users (" +
                     "id SERIAL PRIMARY KEY, " +
@@ -77,4 +77,13 @@ public class JDBCInsert {
         } catch (SQLException e) {
             System.err.println("Error creating tables: " + e.getMessage());
         }
-    }}
+    }
+
+    public User findUserByEmail() {
+        ....
+    }
+
+    public void savePet(Pet pet) {
+
+    }
+}

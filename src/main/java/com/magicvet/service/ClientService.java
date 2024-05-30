@@ -3,20 +3,31 @@ package com.magicvet.service;
 import com.magicvet.auth.Authenticator;
 import com.magicvet.auth.EntityRegister;
 import com.magicvet.auth.JDBCInsert;
+import com.magicvet.model.Owner;
+import com.magicvet.service.jdbc.StorageClient;
+import com.magicvet.service.jdbc.impl.FileStorageClient;
+import com.magicvet.service.jdbc.impl.JdbcClient;
 
 import java.sql.*;
 import java.util.Scanner;
 
 public class ClientService {
+    private final StorageClient storageClient = new FileStorageClient();
+
     Scanner scanner = new Scanner(System.in);
 
-    public void createOwner(String email, String password){
+    public void createOwner(String email, String password) {
         System.out.println("We need some additional data: ");
         System.out.println("What is your Name?");
         String name = scanner.nextLine();
         System.out.println("Please, provide your phone: ");
         String phone = scanner.nextLine();
 
+        Owner owner = new Owner();
+        owner.setName(name);
+        owner.setPhone(phone);
+
+        storageClient.saveOwner(owner);
         //String insertUserSQL = "INSERT INTO users (email, password, phone, name) VALUES ('" + email + "', '" + password + "', '" + phone + "', '" + name + "')";
 
         String insertUserSQL = "INSERT INTO users (email, password, phone, name, created_at) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP) RETURNING id";
