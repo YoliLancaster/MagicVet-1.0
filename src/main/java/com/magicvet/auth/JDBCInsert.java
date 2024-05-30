@@ -6,9 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class JDBCInsert {
-    static final String DB_URL = "jdbc:postgresql://localhost:5433/magicvet-1.0";
-    static final String USER = "postgres";
-    static final String PSW = "12345";
+    public static final String DB_URL = "jdbc:postgresql://localhost:5433/magicvet-1.0";
+    public static final String USER = "postgres";
+    public static final String PSW = "12345";
 
     public Connection getConnection() {
         Connection connection = null;
