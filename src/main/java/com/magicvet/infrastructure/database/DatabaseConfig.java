@@ -1,11 +1,11 @@
-package com.magicvet.auth;
+package com.magicvet.infrastructure.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class JDBCInsert {
+public class DatabaseConfig {
     public static final String DB_URL = "jdbc:postgresql://localhost:5433/magicvet-1.0";
     public static final String USER = "postgres";
     public static final String PSW = "12345";
@@ -20,8 +20,8 @@ public class JDBCInsert {
         return connection;
     }
 
-            public void createTables() {
-                try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+    public void createTables() {
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             String createUserTable = "CREATE TABLE IF NOT EXISTS users (" +
                     "id SERIAL PRIMARY KEY, " +
                     "email VARCHAR(255) UNIQUE NOT NULL, " +
@@ -30,7 +30,8 @@ public class JDBCInsert {
                     "name VARCHAR(255), " +
                     "visit VARCHAR(255)," +
                     "role VARCHAR(50), " +
-                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";;
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+            ;
             statement.executeUpdate(createUserTable);
 
             String createPetTable = "CREATE TABLE IF NOT EXISTS pet (" +
@@ -77,4 +78,5 @@ public class JDBCInsert {
         } catch (SQLException e) {
             System.err.println("Error creating tables: " + e.getMessage());
         }
-    }}
+    }
+}

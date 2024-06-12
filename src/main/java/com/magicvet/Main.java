@@ -1,14 +1,11 @@
-package main.java.com.magicvet;
+package com.magicvet;
 
-import main.java.com.magicvet.auth.AppRunner;
-
-import java.util.Scanner;
+import com.magicvet.auth.AppRunner;
 
 public class Main {
 
     public static void main(String[] args) {
-            AppRunner runner = new AppRunner();
-            runner.run();
-
+        AppRunner runner = new AppRunner();
+        runner.run();
     }
 }

@@ -20,12 +20,14 @@
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
         <version>42.7.3</version>
-    </dependency>
+        </dependency>
 
-
+        <dependency>
+            <groupId>io.javalin</groupId>
+            <artifactId>javalin</artifactId>
+            <version>5.2.0</version>
+        </dependency>
 
     </dependencies>
-
-
 
 </project>

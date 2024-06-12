@@ -1,24 +1,27 @@
-package main.java.com.magicvet.auth;
+package com.magicvet.auth;
 
-import com.magicvet.auth.Authenticator;
-import com.magicvet.auth.EntityRegister;
-import com.magicvet.auth.JDBCInsert;
-import com.magicvet.service.ClientService;
+import com.magicvet.domain.service.AuthServiceImpl;
+import com.magicvet.domain.service.AuthService;
+import com.magicvet.domain.service.OwnerRepositoryImpl;
+import com.magicvet.infrastructure.database.DBService;
+import com.magicvet.infrastructure.database.DatabaseConfig;
+
 
 import java.util.Scanner;
 
 public class AppRunner {
 
-    private final JDBCInsert jdbcInsert;
+    private final AuthService authService;
 
     public AppRunner() {
-        jdbcInsert = new JDBCInsert();
+        DatabaseConfig databaseConfig = new DatabaseConfig();
+        DBService dbService = new DBService(databaseConfig);
+        OwnerRepositoryImpl ownerRepository = new OwnerRepositoryImpl(dbService);
+        this.authService = new AuthServiceImpl(ownerRepository);
     }
 
 
     public void run() {
-        jdbcInsert.getConnection();
-
         System.out.println("Welcome to MagicVet!");
         Scanner scanner = new Scanner(System.in);
 
@@ -26,8 +29,7 @@ public class AppRunner {
         int choice = scanner.nextInt();
         scanner.nextLine();
 
-
-        Authenticator authService = new Authenticator();
+        // Authenticator authService = new Authenticator();
 
         System.out.print("Enter your email: ");
         String email = scanner.nextLine();
@@ -36,34 +38,30 @@ public class AppRunner {
         String password = scanner.nextLine();
 
 
-        switch(choice) {
+        switch (choice) {
             case 1:
                 //  TODO: Authenticator logic
-                if (authService.auth(email, password)) {
+                if (authService.authenticate(email, password)) {
                     System.out.println("Authentication successful!");
                 } else {
                     System.out.println("Authentication failed. Registering user...");
-                    EntityRegister register = new EntityRegister();
-                    register.register(email, password);
-                    return;
+
+                    authService.registerOwnerAndPet(email, password, "", "");
                 }
                 break;
             case 2:
                 //  TODO: EntityReg logic
-                EntityRegister register = new EntityRegister();
-                register.register(email, password);
+                System.out.print("Enter your name: ");
+                String name = scanner.nextLine();
+
+                System.out.print("Enter your phone: ");
+                String phone = scanner.nextLine();
+
+                authService.registerOwnerAndPet(email, password, name, phone);
                 break;
             default:
                 System.out.println("Irrelevant operation.");
         }
-
-
-
-
         scanner.close();
-
-//        if (Authenticator.auth()) {
-//            register.registerClients();
-//        }
     }
 }
