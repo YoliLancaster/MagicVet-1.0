@@ -8,4 +8,6 @@ public interface OwnerRepository {
     int createOwner(Owner owner);
 
     boolean authenticate(String email, String password);
+
+    int getOwnerIdByEmail(String email);
 }

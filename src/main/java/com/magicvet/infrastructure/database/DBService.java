@@ -65,7 +65,7 @@ public class DBService {
     }
 
     public boolean addPetToDB(Pet pet) {
-        String query = "INSERT INTO pets (owner_id, name, type, age, breed, gender, created_at) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+        String query = "INSERT INTO pets (user_id, name, type, age, breed, gender, created_at) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
 
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -84,5 +84,23 @@ public class DBService {
         }
 
         return false;
+    }
+
+    public int getOwnerIdByEmail(String email) {
+        String query = "SELECT id FROM users WHERE email = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, email);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("id");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching owner ID: " + e.getMessage());
+        }
+        return -1;
     }
 }

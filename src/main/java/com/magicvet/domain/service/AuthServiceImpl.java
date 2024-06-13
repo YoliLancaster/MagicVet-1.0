@@ -10,8 +10,9 @@ public class AuthServiceImpl implements AuthService {
     private final OwnerRepository ownerRepository;
     private final PetRepository petRepository;
 
-    public AuthServiceImpl(OwnerRepository ownerRepository) {
+    public AuthServiceImpl(OwnerRepository ownerRepository, PetRepository petRepository) {
         this.ownerRepository = ownerRepository;
+        this.petRepository = petRepository;
     }
 
     @Override
@@ -20,25 +21,18 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void registerOwnerAndPet(String email, String password, String name, String phone, String petName, String petType, int petAge, String petBreed, String petGender) {
+    public int registerOwner(String email, String password, String name, String phone) {
         Owner owner = new Owner(email, password, name, phone);
-        int ownerId = ownerRepository.createOwner(owner);
-
-        if (ownerId > 0) {
-            createPetForOwner(ownerId, petName, petType, petAge, petBreed, petGender);
-        } else {
-            System.out.println("Registration failed");
-        }
+        return ownerRepository.createOwner(owner);
     }
 
-    private void createPetForOwner(int ownerId, String petName, String petType, int petAge, String petBreed, String petGender) {
-        Pet pet = new Pet(ownerId, petName, petType, petAge, petBreed, petGender);
-        boolean isPetRegistered = petRepository.createPet(pet);
+    @Override
+    public void createPetForOwner(int ownerId, Pet pet) {
+        petRepository.createPet(pet);
+    }
 
-        if (isPetRegistered) {
-            System.out.println("Registration successful");
-        } else {
-            System.out.println("Pet registration failed");
-        }
+    @Override
+    public int getOwnerIdByEmail(String email) {
+        return ownerRepository.getOwnerIdByEmail(email);
     }
 }

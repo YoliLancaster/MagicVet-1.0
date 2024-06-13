@@ -113,4 +113,9 @@ public class OwnerRepositoryImpl implements OwnerRepository {
 //        }
         return dbService.addUserToDB(owner.getEmail(), owner.getPassword(), owner.getPhone(), owner.getName());
     }
+
+    @Override
+    public int getOwnerIdByEmail(String email) {
+        return dbService.getOwnerIdByEmail(email);
+    }
 }

@@ -34,7 +34,7 @@ public class DatabaseConfig {
             ;
             statement.executeUpdate(createUserTable);
 
-            String createPetTable = "CREATE TABLE IF NOT EXISTS pet (" +
+            String createPetTable = "CREATE TABLE IF NOT EXISTS pets (" +
                     "id SERIAL PRIMARY KEY, " +
                     "user_id INTEGER NOT NULL, " +
                     "name VARCHAR(255), " +
@@ -47,7 +47,7 @@ public class DatabaseConfig {
                     "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)";
             statement.executeUpdate(createPetTable);
 
-            String createDoctorTable = "CREATE TABLE IF NOT EXISTS doctor (" +
+            String createDoctorTable = "CREATE TABLE IF NOT EXISTS doctors (" +
                     "id SERIAL PRIMARY KEY, " +
                     "username VARCHAR(255), " +
                     "name VARCHAR(255), " +
