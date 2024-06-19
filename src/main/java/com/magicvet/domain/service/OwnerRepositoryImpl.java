@@ -1,8 +1,12 @@
 package com.magicvet.domain.service;
 
 import com.magicvet.domain.model.Owner;
+import com.magicvet.domain.model.Pet;
 import com.magicvet.infrastructure.database.DBService;
 import com.magicvet.infrastructure.persistence.OwnerRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 public class OwnerRepositoryImpl implements OwnerRepository {
     //private final ScannerService scannerService;
@@ -117,5 +121,17 @@ public class OwnerRepositoryImpl implements OwnerRepository {
     @Override
     public int getOwnerIdByEmail(String email) {
         return dbService.getOwnerIdByEmail(email);
+    }
+
+    @Override
+    public Optional<Owner> getOwnerWithPets(String email) {
+        Optional<Owner> optionalOwner = dbService.getOwnerByEmail(email);
+        if (!optionalOwner.isPresent()) {
+            return Optional.empty();
+        }
+        Owner owner = optionalOwner.get();
+        List<Pet> pets = dbService.getPetsByOwnerId(owner.getId());
+        owner.setPets(pets);
+        return Optional.of(owner);
     }
 }

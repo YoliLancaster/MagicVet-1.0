@@ -1,6 +1,9 @@
 package com.magicvet.domain.service;
 
+import com.magicvet.domain.model.Owner;
 import com.magicvet.domain.model.Pet;
+
+import java.util.List;
 
 public interface AuthService {
     boolean authenticate(String email, String password);
@@ -10,4 +13,8 @@ public interface AuthService {
     void createPetForOwner(int ownerId, Pet pet);
 
     int getOwnerIdByEmail(String email);
+
+    List<Pet> getPetsForOwner(int ownerId);
+
+    Owner getOwnerWithPets(String email);
 }

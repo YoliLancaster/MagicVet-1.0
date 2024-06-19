@@ -1,16 +1,39 @@
 package com.magicvet.domain.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Owner {
+    private int id;
     private String email;
     private String password;
     private String name;
     private String phone;
+    private List<Pet> pets;
 
     public Owner(String email, String password, String name, String phone) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.phone = phone;
+        this.pets = new ArrayList<>();
+    }
+
+    public Owner(int id, String email, String password, String name, String phone, List<Pet> pets) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.phone = phone;
+        this.pets = pets;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getEmail() {
@@ -45,6 +68,18 @@ public class Owner {
         this.phone = phone;
     }
 
+    public List<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
+    }
+
+    public void addPet(Pet pet) {
+        this.pets.add(pet);
+    }
+
     @Override
     public String toString() {
         return "Owner{" +
@@ -52,6 +87,7 @@ public class Owner {
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
+                ", pets=" + pets +
                 '}';
     }
 }

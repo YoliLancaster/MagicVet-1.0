@@ -1,11 +1,15 @@
 package com.magicvet.infrastructure.database;
 
+import com.magicvet.domain.model.Owner;
 import com.magicvet.domain.model.Pet;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class DBService {
     private final DatabaseConfig databaseConfig;
@@ -102,5 +106,54 @@ public class DBService {
             System.err.println("Error fetching owner ID: " + e.getMessage());
         }
         return -1;
+    }
+
+    public Optional<Owner> getOwnerByEmail(String email) {
+        String query = "SELECT * FROM users WHERE email = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, email);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String password = resultSet.getString("password");
+                    String phone = resultSet.getString("phone");
+                    String name = resultSet.getString("name");
+                    Owner owner = new Owner(id, email, password, name, phone, new ArrayList<>());
+                    return Optional.of(owner);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
+
+    public List<Pet> getPetsByOwnerId(int ownerId) {
+        List<Pet> pets = new ArrayList<>();
+        String query = "SELECT * FROM pets WHERE user_id = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, ownerId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Pet pet = new Pet(
+                            resultSet.getInt("user_id"),
+                            resultSet.getString("name"),
+                            resultSet.getString("type"),
+                            resultSet.getInt("age"),
+                            resultSet.getString("breed"),
+                            resultSet.getString("gender")
+                    );
+                    pets.add(pet);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching pets: " + e.getMessage());
+        }
+        return pets;
     }
 }

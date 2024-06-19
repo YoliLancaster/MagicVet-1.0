@@ -1,5 +1,6 @@
 package com.magicvet.auth;
 
+import com.magicvet.domain.model.Owner;
 import com.magicvet.domain.model.Pet;
 import com.magicvet.domain.service.AuthServiceImpl;
 import com.magicvet.domain.service.AuthService;
@@ -9,6 +10,7 @@ import com.magicvet.infrastructure.database.DBService;
 import com.magicvet.infrastructure.database.DatabaseConfig;
 
 
+import java.util.List;
 import java.util.Scanner;
 
 public class AppRunner {
@@ -66,7 +68,9 @@ public class AppRunner {
     private void afterLoginMenu(Scanner scanner, String email) {
         System.out.println("Welcome back! What would you like to do?");
         System.out.println("1. Add a pet");
-        System.out.println("2. Logout");
+        System.out.println("2. View my pets");
+        System.out.println("3. View my account info");
+        System.out.println("4 Logout");
 
         int choice = scanner.nextInt();
         scanner.nextLine();
@@ -77,12 +81,40 @@ public class AppRunner {
                 registerPetProcess(ownerId, scanner);
                 break;
             case 2:
+                viewMyPets(email);
+                break;
+            case 3:
+                viewOwnerInfoAndPets(email);
+                break;
+            case 4:
                 System.out.println("Logging out...");
                 break;
             default:
                 System.out.println("Invalid operation.");
         }
     }
+
+    private void viewMyPets(String email) {
+        int ownerId = authService.getOwnerIdByEmail(email);
+        List<Pet> pets = authService.getPetsForOwner(ownerId);
+        if (pets.isEmpty()) {
+            System.out.println("You have no pets registered.");
+        } else {
+            System.out.println("Your pets:");
+            for (Pet pet : pets) {
+                System.out.println(pet);
+            }
+        }
+    }
+
+    private void viewOwnerInfoAndPets(String email) {
+        Owner owner = authService.getOwnerWithPets(email);
+        System.out.println("Owner info: " + owner);
+        for (Pet pet : owner.getPets()) {
+            System.out.println(pet);
+        }
+    }
+
 
     private static Pet collectPetData(Scanner scanner, int ownerId) {
         System.out.println("What is your pet type?");

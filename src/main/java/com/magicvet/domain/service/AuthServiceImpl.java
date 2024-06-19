@@ -5,6 +5,8 @@ import com.magicvet.domain.model.Pet;
 import com.magicvet.infrastructure.persistence.OwnerRepository;
 import com.magicvet.infrastructure.persistence.PetRepository;
 
+import java.util.List;
+
 public class AuthServiceImpl implements AuthService {
 
     private final OwnerRepository ownerRepository;
@@ -34,5 +36,15 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public int getOwnerIdByEmail(String email) {
         return ownerRepository.getOwnerIdByEmail(email);
+    }
+
+    @Override
+    public List<Pet> getPetsForOwner(int ownerId) {
+        return petRepository.getPetsByOwnerId(ownerId);
+    }
+
+    @Override
+    public Owner getOwnerWithPets(String email) {
+        return ownerRepository.getOwnerWithPets(email).orElse(null);
     }
 }
